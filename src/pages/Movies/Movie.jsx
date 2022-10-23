@@ -1,6 +1,7 @@
 import { getMovies } from "components/Api/Api";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Link, Item, List, Button, Input} from "pages/Movies/Movie.styled";
 
 export const Movie = () => {
     const [movies, setMovies] = useState([]);
@@ -24,12 +25,19 @@ export const Movie = () => {
     return (
         <>
         <form onSubmit={handleSubmit} >
-            <input type="text" name="serch"/>
-            <button type="submit">Search</button>
+                <Input
+                    type="text"
+                    name="serch"
+                    autoComplete="off"
+                    placeholder="Search movies" />
+            <Button type="submit">Search</Button>
         </form>
-        <ul>
-            {movies.map(movie => <li key={movie.id}>{ movie.title}</li>)}
-        </ul>
+        <List>
+            {movies.map(({id, title}) =>
+                <Item key={id}>
+                    <Link to={`${id}`}>{title}</Link>
+                </Item>)}
+        </List>
         </>
     );
 }

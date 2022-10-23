@@ -1,6 +1,6 @@
 import { getTrendingToday } from "components/Api/Api";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, Item, List } from "pages/Home/Home.styled";
 
 export const Home = () => {
     const [trending, setTrending] = useState([]);
@@ -12,9 +12,12 @@ export const Home = () => {
     return (
         <>
         <h2>Trending</h2>
-        <ul>
-                {trending.map(trend => <li key={trend.id}><NavLink to={`movies/${trend.id}`}>{ trend.title}</NavLink></li>)}
-        </ul>
+        <List>
+            {trending.map(({id, title}) =>
+                <Item key={id}>
+                    <Link to={`movies/${id}`}>{title}</Link>
+                </Item>)}
+        </List>
        </> 
     );
 }
