@@ -1,17 +1,19 @@
 import { getMovies } from "components/Api/Api";
+import { Loader } from "components/Loader/Loader";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Link, Item, List, Button, Input} from "pages/Movies/Movie.styled";
 
 export const Movie = () => {
     const [movies, setMovies] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') ?? '';
 
     useEffect(() => {
         if (query === '') return;
-           
-        getMovies(query).then(response => setMovies(response.results));
+        setIsLoading(true);   
+        getMovies(query).then(response => setMovies(response.results)).finally(() => setIsLoading(false));
      
     }, [query]);
 
@@ -31,7 +33,8 @@ export const Movie = () => {
                     autoComplete="off"
                     placeholder="Search movies" />
             <Button type="submit">Search</Button>
-        </form>
+            </form>
+            {isLoading && <Loader />}
         <List>
             {movies.map(({id, title}) =>
                 <Item key={id}>

@@ -12,14 +12,14 @@ export const Wrapper = styled.div`
 export const Img = styled.img`
     display: inline-block;
     width: 300px;
-    height: 400px;
+    height: auto;
 `
 export const Item = styled.li`
-     list-style: none;
      margin-bottom: 10px;
 `
 
 export const List = styled.ul`
+    list-style: none;
     display: flex;
     gap: 10px;
     padding: 0;
@@ -30,15 +30,16 @@ export const List = styled.ul`
 export const InformWrapper = styled.div`
     border-bottom: 1px solid black;
     padding-bottom: 16px;
+    margin-bottom: 20px;
 `
 
 export const InformList = styled.ul`
+    list-style: none;
     padding: 0;
     padding-left: 20px;
     margin: 0;
 `
 export const InformItem = styled.li`
-     list-style: none;
      margin-bottom: 10px;
 `
 

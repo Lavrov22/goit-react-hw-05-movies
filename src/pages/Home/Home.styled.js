@@ -14,11 +14,11 @@ export const Link = styled(NavLink)`
 `
 
 export const Item = styled.li`
-     list-style: none;
      margin-bottom: 10px;
 `
 
 export const List = styled.ul`
+    list-style: none;
     padding: 0;
     padding-left: 20px;
     margin: 0;

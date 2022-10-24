@@ -20,6 +20,10 @@ export async function getMovieDetails(movieId) {
 
 export async function getCast(movieId) {
     const { data } = await axios.get(`/movie/${movieId}/credits?api_key=${API_KEY}`);
-    console.log(data);
-    return data;
+    return data.cast;
+}
+
+export async function getReviews(movieId) {
+    const { data } = await axios.get(`/movie/${movieId}/reviews?api_key=${API_KEY}`);
+    return data.results;
 }
