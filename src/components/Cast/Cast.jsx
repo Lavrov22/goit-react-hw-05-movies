@@ -7,7 +7,7 @@ import { List, Item, Img, Text } from "components/Cast/Cast.styled";
 
 
 
-export const Cast = () => {
+const Cast = () => {
     const [cast, setCast] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const { movieId } = useParams();
@@ -15,17 +15,29 @@ export const Cast = () => {
     const imgUrlNotAvailable = useRef('https://upload.wikimedia.org/wikipedia/commons/2/2f/No-photo-m.png');
 
     useEffect(() => {
-        setIsLoading(true);
-        getCast(movieId).then(setCast).finally(() => setIsLoading(false));
+        async function fetcCast() {
+            try {
+                setIsLoading(true);
+                const response = await getCast(movieId);
+                setCast(response);
+                } catch (error) {
+                
+                }finally {
+                setIsLoading(false);
+            };
+        }
+
+        fetcCast();
+
     }, [movieId])
 
-console.log(cast)
 
     return (
     <>
         {isLoading && <Loader />}
         <List>
-            {cast.map(({id, profile_path, original_name, character}) => 
+                {cast.length === 0 ? <Text>We don't have any cast for this movie</Text> 
+            : cast.map(({id, profile_path, original_name, character}) => 
                 <Item key={id}>
                     {profile_path ?
                         <Img src={`${imgUrl.current}${profile_path}`} alt={original_name} /> :
@@ -38,3 +50,5 @@ console.log(cast)
     </>
     );
 }
+
+export default Cast;

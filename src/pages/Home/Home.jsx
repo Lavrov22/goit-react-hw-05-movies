@@ -2,14 +2,27 @@ import { getTrendingToday } from "components/Api/Api";
 import { Loader } from "components/Loader/Loader";
 import { useState, useEffect } from "react";
 import { Link, Item, List } from "pages/Home/Home.styled";
+import { useLocation } from "react-router-dom";
 
-export const Home = () => {
+const Home = () => {
     const [trending, setTrending] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
-        setIsLoading(true);
-        getTrendingToday().then(setTrending).finally(() => setIsLoading(false));
+
+        async function fetcMovies() {
+            try {
+                setIsLoading(true);
+                const response = await getTrendingToday();
+                setTrending(response);
+            } catch (error) {
+                
+            }finally {
+                setIsLoading(false);
+            };
+        }
+        fetcMovies();
     }, []);
      
     return (
@@ -19,9 +32,11 @@ export const Home = () => {
             <List>
                 {trending.map(({id, title}) =>
                     <Item key={id}>
-                        <Link to={`movies/${id}`}>{title}</Link>
+                        <Link to={`movies/${id}`} state={{ from: location }}>{title}</Link>
                     </Item>)}
             </List>
        </> 
     );
 }
+
+export default Home;

@@ -1,26 +1,39 @@
 import { Outlet, useParams } from "react-router-dom"
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { getMovieDetails } from "components/Api/Api";
 import { Loader } from "components/Loader/Loader";
+import { BackLink } from "components/BackLink/BackLink";
 import { Wrapper, Img, Item, List, InformList, InformWrapper, InformLink, InformItem } from "pages/MovieDetails/MovieDetails.styled";
 
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
     const [movies, setMovies] = useState({});
-    const [genres, setGenres] = useState([]);
+    const [genres, setGenres] = useState([]);   
     const [poster, setPoster] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const {movieId} = useParams();
+    const { movieId } = useParams();
+    
+    
    
     useEffect(() => {
-        setIsLoading(true);
-        getMovieDetails(movieId)
-            .then(response => {
-            setMovies(response);
-            setGenres(response.genres);
-            setPoster(`https://image.tmdb.org/t/p/w500${response.poster_path}`);
-        }).finally(() => setIsLoading(false));
-    }, [movieId])
+         
+        async function fetchMovies() {
+            try {
+                setIsLoading(true);
+                const response = await getMovieDetails(movieId);
+                setMovies(response);
+                setGenres(response.genres);
+                setPoster(`https://image.tmdb.org/t/p/w500${response.poster_path}`);
+            } finally {
+                setIsLoading(false);
+            };
+        };
+        
+            fetchMovies();
+    
+    }, [movieId]);
+
+
 
     const sliceDate = () => {
         if (!movies.release_date) return;
@@ -30,12 +43,12 @@ export const MovieDetails = () => {
     const userScrorePercentage = () => {
         return Math.round(movies.vote_average * 10);
     }
-
-
     return (
+        
         <>
             {isLoading ? <Loader /> : 
-            <>
+                <>
+               <BackLink></BackLink>
                 <Wrapper>
                     <div>
                         <Img src={poster} alt="" />
@@ -57,10 +70,14 @@ export const MovieDetails = () => {
                         <InformItem><InformLink to="cast">Cast</InformLink></InformItem>
                         <InformItem><InformLink to="reviews">Reviews</InformLink></InformItem>   
                     </InformList>
-                </InformWrapper>
-                <Outlet />
+                    </InformWrapper>
+                <Suspense fallback={<Loader/>}>
+                    <Outlet />
+                </Suspense>
             </>}
             
         </>
     );
 }
+
+export default MovieDetails;

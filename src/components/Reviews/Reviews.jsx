@@ -4,14 +4,25 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { List, Text } from "components/Reviews/Reviews.styled";
 
-export const Reviews = () => {
+const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const { movieId } = useParams();
     
     useEffect(() => {
-        setIsLoading(true);
-        getReviews(movieId).then(setReviews).finally(() => setIsLoading(false));
+        async function fetcReviews() {
+            try {
+                setIsLoading(true);
+                const response = await getReviews(movieId);
+                setReviews(response);
+                } catch (error) {
+                
+                }finally {
+                setIsLoading(false);
+            };
+        }
+    fetcReviews();
+
     }, [movieId])
 
     return (
@@ -20,12 +31,14 @@ export const Reviews = () => {
             <List>
                 {reviews.length === 0
                     ? <Text>We don't have any reviews for this movie</Text>
-                    : reviews.map(review =>
-                        <li key={review.id}>
-                        <h3>Author: {review.author }</h3>
-                        <Text>{ review.content}</Text>
+                    : reviews.map(({id, author, content}) =>
+                        <li key={id}>
+                        <h3>Author: {author }</h3>
+                        <Text>{ content}</Text>
                         </li>)}
             </List>
         </>
     );
 }
+
+export default Reviews;
