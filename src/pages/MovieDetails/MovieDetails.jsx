@@ -1,4 +1,4 @@
-import { Outlet, useParams } from "react-router-dom"
+import { Outlet, useParams, useLocation } from "react-router-dom"
 import { useState, useEffect, Suspense } from "react";
 import { getMovieDetails } from "components/Api/Api";
 import { Loader } from "components/Loader/Loader";
@@ -12,6 +12,9 @@ const MovieDetails = () => {
     const [poster, setPoster] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { movieId } = useParams();
+    const location = useLocation();
+    const backLink = location.state?.from ?? "/";
+
     
     
    
@@ -67,8 +70,8 @@ const MovieDetails = () => {
                 <InformWrapper>
                     <h2>Additional information</h2>
                     <InformList>
-                        <InformItem><InformLink to="cast">Cast</InformLink></InformItem>
-                        <InformItem><InformLink to="reviews">Reviews</InformLink></InformItem>   
+                        <InformItem><InformLink to="cast" state={{from: backLink}}>Cast</InformLink></InformItem>
+                        <InformItem><InformLink to="reviews" state={{from: backLink}}>Reviews</InformLink></InformItem>   
                     </InformList>
                     </InformWrapper>
                 <Suspense fallback={<Loader/>}>

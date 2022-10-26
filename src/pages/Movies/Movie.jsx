@@ -37,11 +37,12 @@ const Movie = () => {
         const inputValue = form.elements.serch.value;
         setSearchParams(inputValue !== '' ? { query: inputValue } : {});
     }
-
+    // console.log(searchParams)
     return (
         <>
         <form onSubmit={handleSubmit} >
                 <Input
+                    defaultValue={query}
                     type="text"
                     name="serch"
                     autoComplete="off"
